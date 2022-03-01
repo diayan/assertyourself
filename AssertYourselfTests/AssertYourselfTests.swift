@@ -9,28 +9,80 @@ import XCTest
 @testable import AssertYourself
 
 class AssertYourselfTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    func test_fail()  {
+       // XCTFail()
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func test_fail_withSimpleMessage() {
+        XCTFail("We have a problem")
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    func test_fail_withInterpolatedMessage() {
+        let theAnswer = 42
+        XCTFail("The answer to the great question is \(theAnswer)")
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    func testAssertTrue() {
+        let success = false
+        XCTAssertTrue(success)
     }
+    
+    //“ assertion to confirm that an optional value is nil”
+    func test_assertNil() {
+        let optionalValue: Int? = 23
+        XCTAssertNil(optionalValue)
+    }
+    
+    func test_assertNil_withSimpleStruct() {
+        let simpleStruct = SimpleStruct(x: 1, y: 2)
+        XCTAssertNil(simpleStruct)
+    }
+    
+    func test_assertNil_withSelfDescribingType() {
+        let optionalValue: StructWithDescription?  = StructWithDescription(x: 1, y: 2)
+        XCTAssertNil(optionalValue)
+    }
+    
+    func test_assertEqual() {
+        let actual = "actual"
+        XCTAssertEqual(actual, "expected")
+    }
+    
+    //XCTAssertEqual with optional arguments
+    func test_assertEqual_withOptional() {
+        let result: String? = "foo"
+        XCTAssertEqual(result, "bar")
+    }
+    
+    //XCTAssertEqual with floating point values
+    func test_floatingPointDanger() {
+        let result = 0.1 + 0.2
+        XCTAssertEqual(result, 0.3)
+    }
+    
+    //“use the accuracy parameter whenever you want to use XCTAssertEqual with Double or Float types.”
+    func test_floatingPointFixed() {
+        let result = 0.1 + 0.2
+        XCTAssertEqual(result, 0.3, accuracy: 0.0001)
+    }
+    
+    func test_messageOverkill() {
+        let actual = "actual"
+        
+        XCTAssertEqual(actual, "expected", "Expected \"expected\" but got \"\(actual)\"")
+    }
+}
 
+
+struct SimpleStruct {
+    let x: Int
+    let y: Int
+}
+
+struct StructWithDescription: CustomStringConvertible {
+    let x: Int
+    let y: Int
+    
+    var description: String {"(\(x), \(y))"}
 }
